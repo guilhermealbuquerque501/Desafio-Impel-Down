@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafio Impel Down</title>
+</head>
+
+<body>
+
+    <label for="ipt_qtdBatalhas">Quantidade de batalhas</label>
+    <input type="text" id="ipt_qtdBatalhas">
+
+    <label for="ipt_qtdBatalhas">Quantidade de marinheiros em cada batalha</label>
+    <input type="text" id="ipt_qtdMarinheiros">
+
+    <label for="ipt_qtdBatalhas">Quantidade de carnes disponíveis</label>
+    <input type="text" id="ipt_qtdCarnes">
+
+    <button onclick="batalhar()">Batalhar</button>
+
+    <div id="resultado"></div>
+</body>
+
+<script>
+
+    let energiaMarinheiro = 5;
+    let frase_final = ``;
+
+    function batalhar() {
+        resultado.innerHTML = ``
+        frase_final = ``;
+        let energiaLuffy = 100;
+        let qtdBatalhas = Number(ipt_qtdBatalhas.value);
+        let qtdMarinheiros = Number(ipt_qtdMarinheiros.value);
+        let qtdCarnes = Number(ipt_qtdCarnes.value);
+        let energiaBatalha = qtdMarinheiros * energiaMarinheiro;
+        
+        let frase_inicial = `
+        ----------------------------------------<br>
+        Quantidade de batalhas: ${qtdBatalhas} <br>
+        Quantidade de marinheiros: ${qtdMarinheiros} <br>
+        Quantidade de carnes: ${qtdCarnes} <br>
+        ---------------------------------------- <br><br>`
+
+        if (qtdMarinheiros <= 0 || qtdBatalhas <= 0){
+            frase_final += `🛞 Não é possível iniciar, pois não há batalha`;
+        } else {
+            for (let i = 0; i < qtdBatalhas; i++) {
+            if (energiaLuffy <= 0 && qtdCarnes <= 0) {
+                frase_final += `🛞 Não é possível iniciar a ${i + 1}º batalha, acabou a carne e a energia.<br>`
+            } else if (energiaLuffy > 0) {
+                if (i > 0) energiaLuffy = energiaLuffy - 10;  // if para tirar 10 energia
+
+                frase_final += `
+                        ${i + 1}° Batalha Iniciada: <br>
+                        Quantidade de Energia Inicial: ${energiaLuffy} <br>`
+
+                if (energiaLuffy < energiaBatalha && qtdCarnes <= 0) {
+                    let marinheirosDerrotados = energiaLuffy / 5
+                    frase_final += `
+                            Resultado: Luffy foi derrotado, derrotando ${marinheirosDerrotados.toFixed(0)} marinheiro(s)
+                            <br><br>
+                            ⚡ Energia Restante no Final da Batalha: 0 <br>
+                            🥩 Carnes Restantes no Final da Batalha: 0<br>
+                            ---------------------------------------- <br>
+                            `
+                    energiaLuffy = 0;
+                    console.log(energiaLuffy)
+                } else {
+                    energiaLuffy = energiaLuffy - (energiaBatalha) // energia que ele vai perder na batalha
+                    if (energiaLuffy <= 0 && qtdCarnes > 0) {
+                        energiaLuffy = energiaLuffy + 100;
+                        qtdCarnes = qtdCarnes - 1;
+                    }
+
+                    frase_final += `
+                            Resultado: Luffy saiu vitorioso, derrotando ${qtdMarinheiros} marinheiro(s)
+                            <br><br>
+                            ⚡ Energia Restante no Final da Batalha: ${energiaLuffy} <br>
+                            🥩 Carnes Restantes no Final da Batalha: ${qtdCarnes}<br>
+                            ---------------------------------------- <br>
+                            `
+                }
+            }
+
+        }
+        }
+
+        resultado.innerHTML += `${frase_inicial} ${frase_final}`
+
+    }
+
+
+</script>
+
+</html>
